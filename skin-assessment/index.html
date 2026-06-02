@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Skin Assessment | Skin Haven Aesthetics</title>
+<link rel="icon" type="image/png" href="../favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cinnamon:#B8674A;
+    --cinnamon-deep:#9F5639;
+    --burgundy:#5C2A2A;
+    --cream:#F5EFE6;
+    --cream-soft:#FAF6F0;
+    --white:#FFFFFF;
+    --ink:#2A1F1B;
+    --ink-mid:#6B5C54;
+    --ink-soft:#9A8B82;
+    --border:#E8DFD3;
+  }
+  *{margin:0; padding:0; box-sizing:border-box;}
+  body{
+    font-family:'Inter',sans-serif; background:var(--cream); color:var(--ink);
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    padding:2rem 1rem; font-weight:400; line-height:1.6;
+    background-image:radial-gradient(ellipse at 15% 0%, rgba(184,103,74,0.06), transparent 50%),
+                     radial-gradient(ellipse at 85% 100%, rgba(92,42,42,0.05), transparent 50%);
+  }
+  .container{max-width:680px; width:100%;}
+  .brand{text-align:center; margin-bottom:1.8rem;}
+  .brand-label{font-family:'Inter',sans-serif; font-size:0.7rem; font-weight:600; letter-spacing:0.3em; text-transform:uppercase; color:var(--cinnamon);}
+  .brand-name{font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:500; color:var(--burgundy); margin-top:0.4rem; font-style:italic; letter-spacing:0.02em;}
+  .card{
+    background:var(--white); border:1px solid var(--border);
+    border-radius:4px; padding:3rem 2.5rem;
+    box-shadow:0 10px 40px rgba(92,42,42,0.07);
+  }
+  .progress{display:flex; gap:0.4rem; margin-bottom:2rem;}
+  .progress span{flex:1; height:2px; background:var(--border); transition:background 0.3s;}
+  .progress span.active{background:var(--cinnamon);}
+  h1{font-family:'Cormorant Garamond',serif; font-size:clamp(1.9rem,4vw,2.6rem); font-weight:500; line-height:1.15; margin-bottom:0.8rem; color:var(--burgundy); letter-spacing:-0.01em;}
+  h1 .accent{color:var(--cinnamon); font-style:italic;}
+  .sub{color:var(--ink-mid); font-size:0.98rem; margin-bottom:2rem; line-height:1.65; font-weight:400;}
+  .question{font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:500; color:var(--burgundy); margin-bottom:1.5rem; line-height:1.3;}
+  .options{display:flex; flex-direction:column; gap:0.5rem; margin-bottom:2rem;}
+  .option{
+    background:var(--cream-soft); border:1px solid var(--border);
+    border-radius:4px; padding:1.1rem 1.3rem; cursor:pointer;
+    font-family:'Inter',sans-serif; font-size:0.95rem; color:var(--ink);
+    text-align:left; transition:all 0.2s; display:flex; align-items:center; gap:0.9rem; font-weight:400;
+  }
+  .option:hover{border-color:var(--cinnamon); background:rgba(184,103,74,0.04);}
+  .option.selected{border-color:var(--cinnamon); background:rgba(184,103,74,0.08); color:var(--burgundy);}
+  .option-icon{width:18px; height:18px; border-radius:50%; border:1.5px solid var(--ink-soft); display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.2s;}
+  .option.selected .option-icon{border-color:var(--cinnamon); background:var(--cinnamon);}
+  .option.selected .option-icon::after{content:''; width:6px; height:6px; border-radius:50%; background:var(--white);}
+  .btn-row{display:flex; gap:0.8rem; justify-content:space-between; margin-top:0.5rem;}
+  .btn{font-family:'Inter',sans-serif; font-size:0.78rem; font-weight:600; text-transform:uppercase; letter-spacing:0.15em; padding:0.95rem 1.8rem; border-radius:2px; border:none; cursor:pointer; transition:all 0.2s;}
+  .btn-primary{background:var(--cinnamon); color:var(--white);}
+  .btn-primary:hover{background:var(--cinnamon-deep); transform:translateY(-1px); box-shadow:0 6px 18px rgba(184,103,74,0.25);}
+  .btn-primary:disabled{opacity:0.4; cursor:not-allowed; transform:none;}
+  .btn-ghost{background:transparent; color:var(--ink-mid); border:1px solid var(--border);}
+  .btn-ghost:hover{color:var(--burgundy); border-color:var(--cinnamon);}
+  .input{width:100%; background:var(--cream-soft); border:1px solid var(--border); border-radius:2px; padding:0.95rem 1rem; color:var(--ink); font-family:'Inter',sans-serif; font-size:0.95rem; margin-bottom:1rem; transition:border 0.2s;}
+  .input:focus{outline:none; border-color:var(--cinnamon); background:var(--white);}
+  .input-label{font-size:0.7rem; font-family:'Inter',sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:0.15em; color:var(--ink-mid); margin-bottom:0.4rem; display:block;}
+  .result-header{text-align:center; margin-bottom:2rem;}
+  .result-badge{display:inline-block; background:rgba(184,103,74,0.08); border:1px solid var(--cinnamon); color:var(--cinnamon); padding:0.4rem 1.2rem; border-radius:30px; font-family:'Inter',sans-serif; font-size:0.68rem; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:1.2rem;}
+  .rec-card{background:var(--cream-soft); border-left:2px solid var(--cinnamon); padding:1.3rem 1.4rem; margin-bottom:0.8rem; border-radius:0 4px 4px 0;}
+  .rec-card h4{font-family:'Inter',sans-serif; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.18em; color:var(--cinnamon); margin-bottom:0.5rem;}
+  .rec-card p{font-size:0.95rem; color:var(--ink); line-height:1.65; font-weight:400;}
+  .cta-block{text-align:center; margin-top:2rem; padding-top:2rem; border-top:1px solid var(--border);}
+  .cta-block p{color:var(--ink-mid); margin-bottom:1.3rem; font-size:0.98rem; line-height:1.6;}
+  .cta-btn{display:inline-block; background:var(--burgundy); color:var(--white); padding:1.1rem 2.6rem; border-radius:2px; font-family:'Inter',sans-serif; font-size:0.78rem; font-weight:600; text-transform:uppercase; letter-spacing:0.18em; text-decoration:none; transition:all 0.2s;}
+  .cta-btn:hover{background:#3F1B1B; transform:translateY(-1px); box-shadow:0 8px 22px rgba(92,42,42,0.3);}
+  .footer{text-align:center; margin-top:1.8rem; font-size:0.78rem; color:var(--ink-soft); letter-spacing:0.05em; font-family:'Inter',sans-serif;}
+  .footer a{color:var(--cinnamon); text-decoration:none; font-weight:500;}
+  .footer .divider{margin:0 0.6rem; color:var(--border);}
+  .tagline{font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.05rem; color:var(--burgundy); text-align:center; margin-bottom:1.5rem; opacity:0.85;}
+  .hidden{display:none;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="brand">
+    <div class="brand-label">Complimentary Skin Assessment</div>
+    <div class="brand-name">Skin Haven Aesthetics</div>
+  </div>
+
+  <div class="card">
+    <div class="progress">
+      <span id="p1" class="active"></span><span id="p2"></span><span id="p3"></span><span id="p4"></span><span id="p5"></span><span id="p6"></span>
+    </div>
+
+    <!-- Intro -->
+    <div id="step-0" class="step">
+      <h1>No <span class="accent">BS skin</span>. Real results.</h1>
+      <p class="sub">Five questions. Two minutes. A treatment plan written by Rach - RN, plastic-surgeon trained, hospital cancer specialist - delivered to your inbox within 24 hours.</p>
+      <div class="btn-row" style="justify-content:flex-end;">
+        <button class="btn btn-primary" onclick="next()">Begin Assessment</button>
+      </div>
+    </div>
+
+    <!-- Q1 -->
+    <div id="step-1" class="step hidden">
+      <p class="question">What is your number one skin concern?</p>
+      <div class="options" data-q="concern">
+        <div class="option" data-v="pigmentation"><div class="option-icon"></div>Pigmentation, sun damage or uneven tone</div>
+        <div class="option" data-v="acne"><div class="option-icon"></div>Acne, congestion or breakouts</div>
+        <div class="option" data-v="aging"><div class="option-icon"></div>Fine lines, wrinkles or loss of firmness</div>
+        <div class="option" data-v="texture"><div class="option-icon"></div>Texture, scarring or large pores</div>
+        <div class="option" data-v="redness"><div class="option-icon"></div>Redness, rosacea or sensitivity</div>
+      </div>
+      <div class="btn-row"><button class="btn btn-ghost" onclick="prev()">Back</button><button class="btn btn-primary" onclick="next()">Continue</button></div>
+    </div>
+
+    <!-- Q2 -->
+    <div id="step-2" class="step hidden">
+      <p class="question">What is your age range?</p>
+      <div class="options" data-q="age">
+        <div class="option" data-v="20s"><div class="option-icon"></div>20s</div>
+        <div class="option" data-v="30s"><div class="option-icon"></div>30s</div>
+        <div class="option" data-v="40s"><div class="option-icon"></div>40s</div>
+        <div class="option" data-v="50plus"><div class="option-icon"></div>50+</div>
+      </div>
+      <div class="btn-row"><button class="btn btn-ghost" onclick="prev()">Back</button><button class="btn btn-primary" onclick="next()">Continue</button></div>
+    </div>
+
+    <!-- Q3 -->
+    <div id="step-3" class="step hidden">
+      <p class="question">How would you describe your current routine?</p>
+      <div class="options" data-q="routine">
+        <div class="option" data-v="none"><div class="option-icon"></div>Pretty much nothing - I'm starting from scratch</div>
+        <div class="option" data-v="basic"><div class="option-icon"></div>Cleanser and moisturiser - the basics</div>
+        <div class="option" data-v="intermediate"><div class="option-icon"></div>Active ingredients (retinol, vitamin C, acids)</div>
+        <div class="option" data-v="advanced"><div class="option-icon"></div>Full routine plus regular in-clinic treatments</div>
+      </div>
+      <div class="btn-row"><button class="btn btn-ghost" onclick="prev()">Back</button><button class="btn btn-primary" onclick="next()">Continue</button></div>
+    </div>
+
+    <!-- Q4 -->
+    <div id="step-4" class="step hidden">
+      <p class="question">How soon would you like to see real results?</p>
+      <div class="options" data-q="urgency">
+        <div class="option" data-v="event"><div class="option-icon"></div>I have an event in the next 1-3 months</div>
+        <div class="option" data-v="committed"><div class="option-icon"></div>Ready to commit to a 3-6 month plan</div>
+        <div class="option" data-v="lifestyle"><div class="option-icon"></div>Long-term skin investment - no rush</div>
+        <div class="option" data-v="curious"><div class="option-icon"></div>Just exploring my options for now</div>
+      </div>
+      <div class="btn-row"><button class="btn btn-ghost" onclick="prev()">Back</button><button class="btn btn-primary" onclick="next()">Continue</button></div>
+    </div>
+
+    <!-- Q5 contact -->
+    <div id="step-5" class="step hidden">
+      <p class="question">Where should we send your plan?</p>
+      <p class="sub" style="margin-bottom:1.5rem;">Rach will personally review your answers and send a tailored treatment roadmap within 24 hours.</p>
+      <label class="input-label">First Name</label>
+      <input class="input" id="firstName" placeholder="Jane">
+      <label class="input-label">Email</label>
+      <input class="input" id="email" type="email" placeholder="jane@email.com">
+      <label class="input-label">Mobile</label>
+      <input class="input" id="phone" type="tel" placeholder="04XX XXX XXX">
+      <div class="btn-row"><button class="btn btn-ghost" onclick="prev()">Back</button><button class="btn btn-primary" onclick="finish()">Send My Plan</button></div>
+    </div>
+
+    <!-- Result -->
+    <div id="step-result" class="step hidden">
+      <div class="result-header">
+        <div class="result-badge">Your Skin Profile</div>
+        <h1 id="resultTitle">Your <span class="accent">Personalised Plan</span></h1>
+      </div>
+
+      <div class="rec-card">
+        <h4>Primary Focus</h4>
+        <p id="recFocus">Loading...</p>
+      </div>
+      <div class="rec-card">
+        <h4>Recommended Treatments</h4>
+        <p id="recTreatments">Loading...</p>
+      </div>
+      <div class="rec-card">
+        <h4>Your At-Home Foundation</h4>
+        <p id="recHome">Loading...</p>
+      </div>
+
+      <div class="cta-block">
+        <p class="tagline">No BS skin. Real results..</p>
+        <p>Your full plan is on its way to your inbox. To fast-track it, book your $50 Skin Reset Session (45-min deep-dive with skin imaging + carbon facial) this week.</p>
+        <a href="https://book.timely.com" target="_blank" class="cta-btn">Book My Free Consult</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Skin Haven Aesthetics <span class="divider">&middot;</span> 7 Vivian Way, Mount Martha <span class="divider">&middot;</span> <a href="https://skinhavenaesthetics.co" target="_blank">skinhavenaesthetics.co</a>
+  </div>
+</div>
+
+<script>
+  const answers = {};
+  let step = 0;
+  const total = 6;
+
+  document.querySelectorAll('.options').forEach(group => {
+    group.addEventListener('click', e => {
+      const opt = e.target.closest('.option');
+      if(!opt) return;
+      group.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      answers[group.dataset.q] = opt.dataset.v;
+    });
+  });
+
+  function showStep(n){
+    document.querySelectorAll('.step').forEach(s => s.classList.add('hidden'));
+    const id = n === 6 ? 'step-result' : 'step-' + n;
+    document.getElementById(id).classList.remove('hidden');
+    for(let i=1; i<=6; i++){
+      document.getElementById('p'+i).classList.toggle('active', i <= n);
+    }
+  }
+  function next(){ if(step < total - 1){ step++; showStep(step); } }
+  function prev(){ if(step > 0){ step--; showStep(step); } }
+
+  function finish(){
+    const fn = document.getElementById('firstName').value.trim();
+    const em = document.getElementById('email').value.trim();
+    const ph = document.getElementById('phone').value.trim();
+    if(!fn || !em || !ph){ alert('Please fill in all fields so Rach can send your plan.'); return; }
+    answers.firstName = fn; answers.email = em; answers.phone = ph;
+    buildResult();
+    step = 6;
+    showStep(step);
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function buildResult(){
+    const c = answers.concern, age = answers.age, r = answers.routine, u = answers.urgency;
+
+    const focusMap = {
+      pigmentation: 'Brightening and pigment correction - resurfacing uneven tone while protecting against further damage.',
+      acne: 'Calming active breakouts, decongesting the skin and rebuilding a clear, healthy barrier.',
+      aging: 'Stimulating collagen, smoothing fine lines and restoring firmness from the inside out.',
+      texture: 'Resurfacing the skin to smooth texture, soften scarring and refine pore appearance.',
+      redness: 'Strengthening the skin barrier, calming inflammation and reducing visible redness.'
+    };
+
+    const treatmentMap = {
+      pigmentation: 'Ultra Lux Pro IPL for pigment correction paired with XLS Pro microneedling and Face Love brightening serums.',
+      acne: 'XLS Pro microneedling, corrective peels and Face Love clinical-grade home routine.',
+      aging: 'XLS Pro microneedling for collagen induction, Rejuran skin boosters, and a natural-look injectable consult if appropriate.',
+      texture: 'XLS Pro microneedling series and Ultra Lux Pro IPL for resurfacing and texture correction.',
+      redness: 'Gentle Ultra Lux Pro IPL settings, Rejuran skin boosters and Face Love barrier-repair prescriptives.'
+    };
+
+    let homeRec = 'A simple corrective routine: medical-grade cleanser, vitamin C serum, retinol (introduced gradually) and broad-spectrum SPF 50.';
+    if(r === 'none' || r === 'basic') homeRec = 'We will start you on a foundational corrective routine - medical-grade cleanser, vitamin C serum, broad-spectrum SPF and a gentle active. Built progressively so your skin is never overwhelmed.';
+    if(r === 'advanced') homeRec = 'Your routine is already strong - we will fine-tune your actives, layer in any missing prescriptives and align your home protocol with your in-clinic plan.';
+
+    let urgencyNote = '';
+    if(u === 'event') urgencyNote = ' Given your timeline, we will prioritise quick-win treatments (LED, enzyme, peels) in the first four weeks and stack stronger treatments closer to your event.';
+    if(u === 'committed') urgencyNote = ' A perfect window - we will map out a 3-6 month treatment series so you see compounding results.';
+
+    document.getElementById('resultTitle').innerHTML = (answers.firstName || 'Your') + ', here is your <span class="accent">Plan</span>';
+    document.getElementById('recFocus').textContent = focusMap[c] || 'A tailored treatment plan based on your skin goals.';
+    document.getElementById('recTreatments').textContent = (treatmentMap[c] || 'A custom mix of our in-clinic devices and treatments.') + urgencyNote;
+    document.getElementById('recHome').textContent = homeRec;
+  }
+</script>
+</body>
+</html>
